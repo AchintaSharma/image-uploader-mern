@@ -2,9 +2,9 @@ import React from "react";
 import UploadedCSS from "./Uploaded.module.css";
 import Icon from "../components/ui/Icon";
 
-const Uploaded = () => {
-  const imageUrl =
-    "https://swall.teahub.io/photos/small/212-2128299_download-wallpaper-abstrak-samsung.jpg";
+const Uploaded = (props) => {
+  const imageUrl = props.imageUrl;
+
   return (
     <div className={UploadedCSS.container}>
       <div className={UploadedCSS.container__iconholder}>

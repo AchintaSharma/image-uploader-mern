@@ -61,7 +61,7 @@
 }
 
 .dragging {
-  background-color: #ba5050;
+  background-color: #e7eaf4;
 }
 
 .image {
@@ -118,6 +118,8 @@
 
   background: #2f80ed;
   border-radius: 8px;
+
+  cursor: pointer;
 }
 
 .buttontext {

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import UploaderCSS from "./Uploader.module.css";
 import image from "../assets/image.svg";
 
-const Uploader = () => {
+const Uploader = (props) => {
   const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef(null);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -12,7 +13,6 @@ const Uploader = () => {
 
   const handleDragLeave = (e) => {
     e.preventDefault();
-    console.log("Yes");
     setIsDragging(false);
   };
 
@@ -20,17 +20,19 @@ const Uploader = () => {
     e.preventDefault();
     setIsDragging(false);
 
-    //Get the dropped files:
+    //Get the dropped file:
     const files = Array.from(e.dataTransfer.files);
 
-    //Call file upload function:
-    uploadFiles(files);
+    //Call handleUpload function:
+    props.onUpload(files[0]);
   };
 
-  const uploadFiles = (files) => {
-    console.log("Files getting uploaded:");
-    console.log(files);
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    //Call handleUpload function:
+    props.onUpload(file);
   };
+
   return (
     <>
       <div className={UploaderCSS.container}>
@@ -52,7 +54,17 @@ const Uploader = () => {
           </p>
         </div>
         <h4 className={UploaderCSS.bottomtext}>Or</h4>
-        <div className={UploaderCSS.button}>
+        <div
+          onClick={() => inputRef.current.click()}
+          className={UploaderCSS.button}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            ref={inputRef}
+            style={{ display: "none" }}
+            onChange={handleImageSelect}
+          />
           <p className={UploaderCSS.buttontext}>Choose a file</p>
         </div>
       </div>

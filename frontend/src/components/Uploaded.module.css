@@ -1,0 +1,138 @@
+.container {
+  position: absolute;
+  width: 400.36px;
+  height: 454.96px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.container__iconholder {
+  position: absolute;
+  height: 35px;
+  width: 35px;
+  top: 39.5px;
+  left: 182.68px;
+}
+
+.title {
+  position: absolute;
+  width: 198px;
+  height: 27px;
+  top: 85.53px;
+  left: 101.18px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+
+  text-align: center;
+  letter-spacing: -0.035em;
+
+  /* Gray 2 */
+
+  color: #4f4f4f;
+}
+
+.container__image {
+  position: absolute;
+  width: 338px;
+  height: 224.4px;
+  top: 137.87px;
+  left: 31.18px;
+  border-radius: 12px;
+  overflow: hidden; /* hide any overflow outside of the container */
+
+  display: flex; /* use flexbox to center the image */
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.container__bottom {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 338px;
+  height: 34px;
+  top: 387.6px;
+  left: 31.18px;
+
+  background: #f6f8fb;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.container__bottom_text {
+  position: absolute;
+  width: 240px;
+  height: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 7.12px;
+
+  display: inline-block;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 8px;
+
+  line-height: 12px;
+  text-align: center;
+  letter-spacing: -0.035em;
+  color: #4f4f4f;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container__bottom_button {
+  position: absolute;
+  width: 74px;
+  height: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1.2px;
+  background: #2f80ed;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.container__bottom_button p {
+  position: absolute;
+  width: 37px;
+  height: 12px;
+  top: 9px;
+  left: 19.98px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 8px;
+  line-height: 12px;
+
+  text-align: center;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

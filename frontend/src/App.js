@@ -9,16 +9,22 @@ function App() {
   const [uploadState, setUploadState] = useState("uploader"); // set initial state to "uploader"
 
   const handleUpload = (file) => {
-    setUploadState("uploading");
     console.log(file);
-    sessionStorage.setItem("image", file);
+    //!Write logic for null file.
+    setUploadState("uploading");
+    //axios post to db and get response image url
+    const imageUrl =
+      "https://swall.teahub.io/photos/small/212-2128299_download-wallpaper-abstrak-samsung.jpg";
+
+    //set this to local storage for now.
+    localStorage.setItem("image", imageUrl);
+    //mock db response time
     setTimeout(() => {
       setUploadState("uploaded");
-      setImageUrl(
-        "https://swall.teahub.io/photos/small/212-2128299_download-wallpaper-abstrak-samsung.jpg"
-      );
+      setImageUrl(imageUrl);
     }, 3000);
   };
+
   return (
     <>
       {uploadState === "uploader" && <Uploader onUpload={handleUpload} />}

@@ -4,8 +4,9 @@ import Icon from "../components/ui/Icon";
 
 const Uploaded = (props) => {
   const imageUrl = props.imageUrl;
-  const image = props.image;
-  console.log(image);
+  const image = props.image64String;
+  console.log("Uploaded component:", image);
+
   return (
     <div className={UploadedCSS.container}>
       <div className={UploadedCSS.container__iconholder}>
@@ -19,7 +20,10 @@ const Uploaded = (props) => {
         <div className={UploadedCSS.container__bottom_text} title={imageUrl}>
           {imageUrl}
         </div>
-        <div className={UploadedCSS.container__bottom_button}>
+        <div
+          onClick={() => navigator.clipboard.writeText(imageUrl)}
+          className={UploadedCSS.container__bottom_button}
+        >
           <p>Copy Link</p>
         </div>
       </div>

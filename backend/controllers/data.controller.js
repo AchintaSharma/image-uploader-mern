@@ -1,4 +1,6 @@
+const fs = require("fs");
 const path = require("path");
+const mime = require("mime-types");
 const url = require("url");
 const Data = require("../models/data.model");
 
@@ -53,6 +55,28 @@ exports.uploadImage = async (req, res) => {
       return res.status(500).send({
         message: `Some internal error occured while uploading file to the server`,
       });
+    }
+  });
+};
+
+exports.getImage = async (req, res) => {
+  console.log(req.params);
+  const imagePath =
+    path.join(__dirname, "../uploads/images/") + req.params.filename;
+
+  fs.readFile(imagePath, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send({
+        success: false,
+        message: `Some internal error occured while getting image from server`,
+      });
+    } else {
+      const base64Data = data.toString("base64");
+      const mimeType = mime.lookup(imagePath);
+      const imageDataUrl = `data:${mimeType};base64,${base64Data}`;
+
+      return res.status(200).send({ imageDataUrl });
     }
   });
 };

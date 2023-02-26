@@ -1,11 +1,13 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const serverConfig = require("./configs/server.config");
 const dbConfig = require("./configs/db.config");
 
 const app = express();
+app.use(cors());
 app.use(fileUpload());
 
 mongoose.set("strictQuery", false);

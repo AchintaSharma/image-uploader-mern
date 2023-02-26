@@ -1,14 +1,17 @@
 const express = require("express");
-const fileUpload = require("express-fileupload");
+const multer = require("multer");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const serverConfig = require("./configs/server.config");
 const dbConfig = require("./configs/db.config");
 
 const app = express();
+
 app.use(cors());
-app.use(fileUpload());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 mongoose.set("strictQuery", false);
 mongoose.connect(dbConfig.DB_URL);

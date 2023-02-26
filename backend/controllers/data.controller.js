@@ -1,71 +1,64 @@
-const fs = require("fs");
 const path = require("path");
-const mime = require("mime-types");
-const url = require("url");
-const Data = require("../models/data.model");
+const Image = require("../models/data.model");
+const fs = require("fs");
 
 //Directory path for storing images
-const PATH = "/uploads/images/";
+const PATH = "/upload/images/";
 
 //Controller for uploading image
 exports.uploadImage = async (req, res) => {
-  console.log("Req file name: ", JSON.stringify(req.files.image.name));
-  if (!req.files || Object.keys(req.files).length === 0) {
+  // handle case where image is not provided by the user
+  if (!req.file || req.file.filename == "") {
+    console.log("No image provided");
     return res.status(400).send({
-      messsage: "No files were uploaded.",
+      success: false,
+      messsage: "No image is provided.",
     });
   }
-  let uploadImage = req.files.image;
 
-  console.log("image file details: ", req.files.image);
-  const storagePath =
-    path.join(__dirname, "../uploads/images/") + uploadImage.name;
+  //check request file name
+  console.log("request:", req.file.filename);
 
-  // Use the mv() method to place the file in the desired location on the server
-  uploadImage.mv(storagePath, async (err) => {
-    if (err) {
-      console.log(err);
+  //store file in db
+  try {
+    const saveImage = await Image.create({
+      imageName: req.file.filename,
+      image: {
+        data: fs.readFileSync("upload/images/" + req.file.filename),
+        contentType: `image/${path.extname(req.file.filename).slice(1)}`,
+      },
+      imageUrl: `${PATH}${req.file.filename}`,
+    });
+
+    // console.log("Stored image in db:", saveImage);
+
+    //Handle save operation on db failure
+    if (!saveImage) {
+      console.log("error in storing image");
       return res.status(500).send({
         success: false,
-        message: `Some internal error occured while uploading file to the server`,
+        message: `Some internal error occured while uploading image to the server`,
       });
     }
 
-    // Save file URL to MongoDB
-    try {
-      const storedImage = await Data.create({
-        imageName: uploadImage.name,
-        imageUrl: `${PATH + uploadImage.name}`,
-      });
+    //create response object
+    const repsonse = {
+      success: true,
+      imageId: saveImage._id,
+      fileName: saveImage.imageName,
+      // image: saveImage.image,
+      imageUrl: saveImage.imageUrl,
+    };
+    console.log("response: ", repsonse);
 
-      console.log("stored image in db: ", storedImage);
-
-      if (!storedImage) {
-        console.log("error in storing data");
-        return res.status(500).send({
-          success: false,
-          message: `Some internal error occured while uploading file to the server`,
-        });
-      }
-
-      //create response objec
-      const repsonse = {
-        success: true,
-        imageId: storedImage._id,
-        fileName: storedImage.imageName,
-        imageUrl: storedImage.imageUrl,
-      };
-
-      console.log("Res: ", repsonse.fileName);
-      // Send success response with file name
-      return res.status(201).send(repsonse);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).send({
-        message: `Some internal error occured while uploading file to the server`,
-      });
-    }
-  });
+    // Send success response with response object
+    return res.status(201).send(repsonse);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      message: `Some internal error occured while uploading image to the server`,
+    });
+  }
 };
 
 exports.getImage = async (req, res) => {
@@ -108,8 +101,7 @@ exports.getImage = async (req, res) => {
         const image64String = `data:${mimeType};base64,${base64Data}`;
         console.log("Response length: ", Object.keys(image64String).length);
         return res.status(200).send({
-          success: true,
-          image64String: image64String,
+          image64String,
         });
       }
     });

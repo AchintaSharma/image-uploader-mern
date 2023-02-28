@@ -2,8 +2,9 @@ import React, { useState, useRef } from "react";
 import UploaderCSS from "./Uploader.module.css";
 import image from "../assets/image.svg";
 
-const Uploader = (props) => {
+const Uploader = ({ handleUpload }) => {
   const [isDragging, setIsDragging] = useState(false);
+  // const [image, setImage] = useState(null);
   const inputRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -23,14 +24,22 @@ const Uploader = (props) => {
     //Get the dropped file:
     const files = Array.from(e.dataTransfer.files);
 
+    //setImage
+
     //Call handleUpload function:
-    props.onUpload(files[0]);
+    if (files) {
+      // setImage(files[0]);
+      handleUpload(files[0]);
+    }
   };
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     //Call handleUpload function:
-    props.onUpload(file);
+    if (file) {
+      // setImage(file);
+      handleUpload(file);
+    }
   };
 
   return (

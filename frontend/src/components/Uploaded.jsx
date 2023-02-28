@@ -1,11 +1,23 @@
 import React from "react";
 import UploadedCSS from "./Uploaded.module.css";
 import Icon from "../components/ui/Icon";
+import axios from "axios";
 
-const Uploaded = (props) => {
-  const imageUrl = props.imageUrl;
-  const image = props.image64String;
-  console.log("Uploaded component:", image);
+const SERVER = "http://localhost:8080";
+
+const Uploaded = ({ imageUrl, imageFileName }) => {
+  const getImage = (imageFileName) => {
+    axios
+      .get(`${SERVER}/api/images/${imageFileName}`)
+      .then((res) => {
+        console.log("Res:", res.data);
+        // console.log(`"${res.data.image64String}'`);
+        return res.data.image64String;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={UploadedCSS.container}>
@@ -14,7 +26,10 @@ const Uploaded = (props) => {
       </div>
       <div className={UploadedCSS.title}>Uploaded Successfully!</div>
       <div className={UploadedCSS.container__image}>
-        <img src={image} alt="uploadedimage.jpg" />
+        <img
+          src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+          alt="uploadedimage.jpg"
+        />
       </div>
       <div className={UploadedCSS.container__bottom}>
         <div className={UploadedCSS.container__bottom_text} title={imageUrl}>

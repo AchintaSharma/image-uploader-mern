@@ -10,15 +10,16 @@ const SERVER = "http://localhost:8080";
 
 function App() {
   const [imageUrl, setImageUrl] = useState("");
-  const [image64String, setImage64String] = useState("");
+  // const [image64String, setImage64String] = useState("");
   const [uploadState, setUploadState] = useState("uploader"); // set initial state to "uploader"
+  const [imageFileName, setImageFileName] = useState("");
 
   const handleUpload = (image) => {
     //!Write logic for null image.
     if (!image) {
       console.log("No image selected");
     }
-    console.log(image);
+    console.log("Handle upload:", image);
     setUploadState("uploading");
 
     const formData = new FormData();
@@ -38,27 +39,28 @@ function App() {
       })
       .then((res) => {
         console.log("Backend response: ", res.data);
+        //set image url
         const imageUrl = res.data.imageUrl;
-
-        const imageFileName = res.data.fileName;
         console.log("Image url: ", imageUrl);
-        // setImageUrl(imageUrl);
-        console.log("ImageFileName: ", imageFileName);
+        setImageUrl(imageUrl);
 
+        //retrieve image file name for get request
+        setImageFileName(res.data.fileName);
+        setUploadState("uploaded");
         //get image
-        axios
-          .get(`${SERVER}/api/images/${imageFileName}`)
-          .then((res) => {
-            console.log("Res:", res.data);
-            console.log(`"${res.data.image64String}'`);
-            setImage64String(`"${res.data.image64String}'`);
-            setUploadState("uploaded");
-            console.log("image64String:", image64String);
-          })
-          .catch((err) => {
-            console.log(err);
-            setUploadState("uploader");
-          });
+        // axios
+        //   .get(`${SERVER}/api/images/${imageFileName}`)
+        //   .then((res) => {
+        //     console.log("Res:", res.data);
+        //     console.log(`"${res.data.image64String}'`);
+        //     setImage64String(`"${res.data.image64String}'`);
+        //     console.log("image64String:", image64String);
+        //     setUploadState("uploaded");
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //     setUploadState("uploader");
+        //   });
 
         // localStorage.setItem("image", imageUrl);
       })
@@ -76,11 +78,10 @@ function App() {
 
   return (
     <>
-      {console.log("imageString: ", image64String)}
-      {uploadState === "uploader" && <Uploader onUpload={handleUpload} />}
+      {uploadState === "uploader" && <Uploader handleUpload={handleUpload} />}
       {uploadState === "uploading" && <Uploading />}
       {uploadState === "uploaded" && (
-        <Uploaded imageUrl={imageUrl} image64String={image64String} />
+        <Uploaded imageFileName={imageFileName} imageUrl={imageUrl} />
       )}
     </>
   );

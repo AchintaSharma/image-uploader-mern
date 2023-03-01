@@ -4,7 +4,7 @@ const imageSchema = new mongoose.Schema(
   {
     imageName: {
       type: String,
-      // required: true,
+      required: true,
     },
     image: {
       data: Buffer,
@@ -12,7 +12,7 @@ const imageSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      // required: true,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }

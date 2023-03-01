@@ -29,13 +29,9 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 27px;
-  /* identical to box height */
 
   text-align: center;
   letter-spacing: -0.035em;
-
-  /* Gray 2 */
-
   color: #4f4f4f;
 }
 
@@ -46,21 +42,20 @@
   top: 137.87px;
   left: 31.18px;
   border-radius: 12px;
-  overflow: hidden; /* hide any overflow outside of the container */
+  overflow: hidden;
 
-  display: flex; /* use flexbox to center the image */
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: cover;
+.container__image img {
+  /* width: 100%; */
+  width: auto;
+  /* height: auto; */
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
   border-radius: inherit;
 }
 

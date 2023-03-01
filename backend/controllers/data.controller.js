@@ -1,6 +1,7 @@
 const path = require("path");
 const Image = require("../models/data.model");
 const fs = require("fs");
+const mime = require("mime");
 
 //Directory path for storing images
 const PATH = "/upload/images/";
@@ -15,9 +16,7 @@ exports.uploadImage = async (req, res) => {
       messsage: "No image is provided.",
     });
   }
-
-  //check request file name
-  console.log("request:", req.file.filename);
+  // console.log("file in request:", req.file.filename);
 
   //store file in db
   try {
@@ -49,7 +48,7 @@ exports.uploadImage = async (req, res) => {
       // image: saveImage.image,
       imageUrl: saveImage.imageUrl,
     };
-    console.log("response: ", repsonse);
+    // console.log("response: ", repsonse);
 
     // Send success response with response object
     return res.status(201).send(repsonse);
@@ -62,8 +61,7 @@ exports.uploadImage = async (req, res) => {
 };
 
 exports.getImage = async (req, res) => {
-  console.log("entering getImage() controller");
-  console.log("param: ", req.params);
+  // console.log("param: ", req.params);
 
   if (!req.params.filename && req.params.filename !== "") {
     console.log("no filename specified in request");
@@ -73,10 +71,11 @@ exports.getImage = async (req, res) => {
   }
 
   try {
-    console.log("Searching image in db: ", req.params.filename);
-    console.log(typeof req.params.filename);
-    const searchedFile = await Data.findOne({ imageName: req.params.filename });
-    console.log("Found: ", searchedFile);
+    // console.log("Searching image in db: ", req.params.filename);
+    const searchedFile = await Image.findOne({
+      imageName: req.params.filename,
+    });
+
     if (!searchedFile) {
       console.log("file not found");
       return res.status(400).send({
@@ -86,7 +85,7 @@ exports.getImage = async (req, res) => {
     }
 
     const imagePath =
-      path.join(__dirname, "../uploads/images/") + req.params.filename;
+      path.join(__dirname, "../upload/images/") + req.params.filename;
 
     fs.readFile(imagePath, (err, data) => {
       if (err) {
@@ -97,9 +96,9 @@ exports.getImage = async (req, res) => {
         });
       } else {
         const base64Data = data.toString("base64");
-        const mimeType = mime.lookup(imagePath);
+        const mimeType = mime.getType(imagePath);
         const image64String = `data:${mimeType};base64,${base64Data}`;
-        console.log("Response length: ", Object.keys(image64String).length);
+        // console.log("Response length: ", Object.keys(image64String).length);
         return res.status(200).send({
           image64String,
         });

@@ -10,26 +10,28 @@ const SERVER = "http://localhost:8080";
 
 function App() {
   const [imageUrl, setImageUrl] = useState("");
-  // const [image64String, setImage64String] = useState("");
+  const [imageString, setImageString] = useState("");
   const [uploadState, setUploadState] = useState("uploader"); // set initial state to "uploader"
-  const [imageFileName, setImageFileName] = useState("");
 
   const handleUpload = (image) => {
-    //!Write logic for null image.
+    //if no image is provided
     if (!image) {
-      console.log("No image selected");
+      console.log("No image selected.");
+      return;
     }
-    console.log("Handle upload:", image);
+    // console.log("Image to upload:", image);
     setUploadState("uploading");
 
     const formData = new FormData();
     formData.append("image", image); // Establish a file name convention
 
-    // Check formData contents
-    for (const [key, value] of formData.entries()) {
-      // console.log("---");
-      console.log(key, value);
-    }
+    //  Check formData contents
+    /*    console.log("Form");
+        for (const [key, value] of formData.entries()) {
+          console.log(key, value);
+        }
+     */
+
     //axios post to db and get response image url
     axios
       .post(`${SERVER}/api/upload/`, formData, {
@@ -38,50 +40,35 @@ function App() {
         },
       })
       .then((res) => {
-        console.log("Backend response: ", res.data);
-        //set image url
-        const imageUrl = res.data.imageUrl;
-        console.log("Image url: ", imageUrl);
-        setImageUrl(imageUrl);
+        // console.log("Backend response: ", res.data);
+        setImageUrl(SERVER + res.data.imageUrl.replace("upload", "api"));
 
-        //retrieve image file name for get request
-        setImageFileName(res.data.fileName);
+        axios
+          .get(`${SERVER}/api/images/${res.data.fileName}`)
+          .then((res) => {
+            setImageString(res.data.image64String);
+            return;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         setUploadState("uploaded");
-        //get image
-        // axios
-        //   .get(`${SERVER}/api/images/${imageFileName}`)
-        //   .then((res) => {
-        //     console.log("Res:", res.data);
-        //     console.log(`"${res.data.image64String}'`);
-        //     setImage64String(`"${res.data.image64String}'`);
-        //     console.log("image64String:", image64String);
-        //     setUploadState("uploaded");
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //     setUploadState("uploader");
-        //   });
-
-        // localStorage.setItem("image", imageUrl);
       })
       .catch((err) => {
         console.error(err);
-        //go back to uploader
+        //if err, go back to uploader
+        console.log(err);
         setUploadState("uploader");
       });
   };
-
-  // useEffect(() => {
-  //   //axios get image base 64 string from db as an effect of change of image file name
-  //   console.log("Checking imageFileName inside useEffect: ", imageFileName);
-  // }, [imageFileName]);
 
   return (
     <>
       {uploadState === "uploader" && <Uploader handleUpload={handleUpload} />}
       {uploadState === "uploading" && <Uploading />}
       {uploadState === "uploaded" && (
-        <Uploaded imageFileName={imageFileName} imageUrl={imageUrl} />
+        <Uploaded imageString={imageString} imageUrl={imageUrl} />
       )}
     </>
   );

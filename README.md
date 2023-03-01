@@ -11,7 +11,9 @@ Before you proceed with the installation, make sure you have the following softw
 
 1. Clone the repository
 
-`git clone https://github.com/AchintaSharma/image-uploader-mern`
+```
+git clone https://github.com/AchintaSharma/image-uploader-mern
+```
 
 2. Install dependencies for the frontend
 
